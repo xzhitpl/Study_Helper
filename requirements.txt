@@ -1,0 +1,12 @@
+PyQt6
+pillow
+numpy
+pygame
+scikit-learn
+requests
+Cython
+PyMuPDF
+python-docx
+baidu-aip
+chardet
+pycryptodomex
