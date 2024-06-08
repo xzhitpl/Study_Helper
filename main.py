@@ -10,6 +10,7 @@ from io import BytesIO
 import fitz
 import numpy as np
 import pygame
+import qianfan
 import requests
 from PIL import Image
 from PyQt6.QtCore import QThread, pyqtSignal, pyqtSlot
@@ -22,12 +23,14 @@ from docx.shared import Cm, Pt, RGBColor
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
+import chat
 import contact
 import cut
 import erase
 import feedback
 import practice
 import record
+import safe
 import settings
 import sub_win
 from win import Ui_MainWindow
@@ -669,7 +672,7 @@ def check_updates(show):
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                              "Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0"}
     try:
-        response = requests.get("https://raw.githubusercontent.com/xzhiter/Mistakes_Recorder/main/version",
+        response = requests.get("https://raw.githubusercontent.com/xzhitpl/Study_Helper/main/version",
                                 headers=headers, timeout=5, verify=False)
     except:
         if show:
@@ -679,13 +682,28 @@ def check_updates(show):
     ver = float(response.text)
     if ver > 3.2:
         return 0, "软件更新", (
-            f"检测到最新版本V{ver}，请<a href=\"https://github.com/xzhiter/Mistakes_Recorder/releases\">"
+            f"检测到最新版本V{ver}，请<a href=\"https://github.com/xzhitpl/Study_Helper/releases\">"
             "点这里</a>下载最新版本。")
     else:
         if show:
             return 0, "软件更新", "当前已是最新版本"
         else:
             return -1,
+
+
+def api(question, method):
+    global msgs
+    if method == "单轮对话":
+        msgs = qianfan.Messages()
+        resp = chat_comp.do(messages=[{
+            "role": "user",
+            "content": question
+        }])
+    else:
+        msgs.append(question)
+        resp = chat_comp.do(model="ERNIE-4.0-8K-0329", messages=msgs)
+        msgs.append(resp)
+    return resp["body"]["result"]
 
 
 class Window(QMainWindow, Ui_MainWindow):
@@ -707,6 +725,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.actionContact_Us.triggered.connect(self.contact_us)
         self.actionAbout.setEnabled(False)
         self.actionCheck_Updates.triggered.connect(lambda: self.setup_normal_thread(lambda: check_updates(True)))
+        self.actionChat_with_AI.triggered.connect(self.chat_with_ai)
 
     def setup_thread(self, sub, cut_, cut_sec, erase_handwriting):
         dir_path = QFileDialog.getExistingDirectory(win, "浏览", "C:/")
@@ -771,8 +790,7 @@ class Window(QMainWindow, Ui_MainWindow):
             "yd_id": settings_window.lineEdit_6.text(),
             "yd_key": settings_window.lineEdit_7.text(),
         }
-        with open("./options.pkl", "wb") as f_:
-            pickle.dump(options, f_)
+        safe.dump(options, "./options.safe")
 
     def cut_starter(self, text, erase_handwriting):
         if text == "自动识别":
@@ -850,6 +868,30 @@ class Window(QMainWindow, Ui_MainWindow):
         self.move_center(contact_win)
         contact_win.exec()
 
+    def chat_with_ai(self):
+        class ChatAI(QDialog, chat.Ui_Dialog):
+            def __init__(self, parent=self):
+                global msgs
+                msgs = qianfan.Messages()
+                QDialog.__init__(self, parent)
+                self.setupUi(self)
+                self.pushButton.clicked.connect(lambda: self.setup_thread(lambda: api(self.plainTextEdit.toPlainText(),
+                                                                                      self.comboBox.currentText())))
+
+            def setup_thread(self, func):
+                self.textEdit.setText("生成中...")
+                self.thread_ = Thread(func)
+                self.thread_.signal_tuple.connect(self.thread_finished)
+                self.thread_.start()
+
+            @pyqtSlot(tuple)
+            def thread_finished(self, item):
+                self.textEdit.setMarkdown(item[0])
+
+        chat_win = ChatAI()
+        self.move_center(chat_win)
+        chat_win.exec()
+
 
 def except_hook(cls, exception, _traceback):
     err = "".join(traceback.format_exception(cls, exception, _traceback))
@@ -864,9 +906,8 @@ if __name__ == "__main__":
         with open("./error.log", "r", encoding="UTF-8") as f:
             feedback.send(f.read())
         os.remove("./error.log")
-    if os.path.isfile("./options.pkl"):
-        with open("./options.pkl", "rb") as f:
-            options = pickle.load(f)
+    if os.path.isfile("./options.safe"):
+        options = safe.load("./options.safe")
     else:
         options = {
             "size": (1500, 900),
@@ -876,10 +917,13 @@ if __name__ == "__main__":
             "SECRET_KEY": "",
             "erase": False,
             "yd_id": "",
-            "yd_key": ""
+            "yd_key": "",
+            "AI": False,
+            "AI_APP_ID": "",
+            "AI_API_KEY": "",
+            "AI_SECRET_KEY": "",
         }
-        with open("./options.pkl", "wb") as f:
-            pickle.dump(options, f)
+        safe.dump(options, "./options.safe")
     if not os.path.isdir("./math"):
         os.mkdir("./math")
     if os.path.isfile("./math/index.pkl"):
@@ -926,6 +970,8 @@ if __name__ == "__main__":
     client = AipOcr(options["APP_ID"], options["API_KEY"], options["SECRET_KEY"])
     if options["erase"]:
         erase.set_key(options["yd_id"], options["yd_key"])
+    chat_comp = qianfan.ChatCompletion(ak="0RMp5YODd7qxztv41KzhgZjD", sk="V305jJQA8YE4D6GpGg5p9fc0DLbpTAfK")
+    msgs = qianfan.Messages()
     pygame.init()
     font = pygame.font.Font("./msyh.ttc", 20)
     app = QApplication(sys.argv)
