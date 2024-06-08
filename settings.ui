@@ -6,21 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>467</width>
-    <height>320</height>
+    <width>457</width>
+    <height>433</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>设置</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3">
-   <item row="3" column="0" colspan="2">
-    <widget class="QCheckBox" name="checkBox_2">
-     <property name="text">
-      <string>手写擦除</string>
-     </property>
-    </widget>
-   </item>
+  <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -34,6 +27,19 @@
       <string>宽</string>
      </property>
     </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLineEdit" name="lineEdit"/>
+   </item>
+   <item row="0" column="3">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>高</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QLineEdit" name="lineEdit_2"/>
    </item>
    <item row="1" column="0">
     <widget class="QCheckBox" name="checkBox">
@@ -89,18 +95,12 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="4">
-    <widget class="QLineEdit" name="lineEdit_2"/>
-   </item>
-   <item row="0" column="3">
-    <widget class="QLabel" name="label_3">
+   <item row="3" column="0">
+    <widget class="QCheckBox" name="checkBox_2">
      <property name="text">
-      <string>高</string>
+      <string>手写擦除</string>
      </property>
     </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QLineEdit" name="lineEdit"/>
    </item>
    <item row="4" column="0" colspan="5">
     <widget class="QGroupBox" name="groupBox_2">
@@ -112,13 +112,6 @@
        <widget class="QLabel" name="label_7">
         <property name="text">
          <string>应用ID</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit_6">
-        <property name="echoMode">
-         <enum>QLineEdit::Password</enum>
         </property>
        </widget>
       </item>
@@ -136,10 +129,61 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEdit_6">
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
-   <item row="5" column="4">
+   <item row="5" column="0" colspan="2">
+    <widget class="QCheckBox" name="checkBox_3">
+     <property name="text">
+      <string>AI</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="5">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>API设置</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>Access Key</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEdit_8">
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>Secret Key</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineEdit_9">
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="7" column="4">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
@@ -149,5 +193,38 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Dialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>375</x>
+     <y>298</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>233</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Dialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>375</x>
+     <y>298</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>233</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

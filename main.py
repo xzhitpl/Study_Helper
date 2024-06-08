@@ -10,6 +10,7 @@ from io import BytesIO
 import fitz
 import numpy as np
 import pygame
+import pyperclip
 import qianfan
 import requests
 from PIL import Image
@@ -92,8 +93,8 @@ def pdf(pdf_path, image_path):
         pix = pdf_page.get_pixmap(matrix=mat, alpha=False)
         if not os.path.exists(image_path):
             os.makedirs(image_path)
-        if "__single__section__XZHRO" in pdf_path:
-            last = "__single__section__XZHRO"
+        if "__single__section" in pdf_path:
+            last = "__single__section"
         else:
             last = ""
         pix._writeIMG(f"{image_path}/{pg}{last}.jpg", format_=7, jpg_quality=100)
@@ -139,7 +140,7 @@ class Page:
                     pos.append([rect.cut_rect.center[0], 0])
                     self.rects.append(rect)
         x = np.array(pos)
-        if "__single__section__XZHRO" in path:
+        if "__single__section" in path:
             self.section_num = 1
             k_means = KMeans(n_clusters=1).fit(x)
         elif not cut_ or cut_sec < 0:
@@ -680,7 +681,7 @@ def check_updates(show):
         else:
             return -1,
     ver = float(response.text)
-    if ver > 3.2:
+    if ver > 3.3:
         return 0, "软件更新", (
             f"检测到最新版本V{ver}，请<a href=\"https://github.com/xzhitpl/Study_Helper/releases\">"
             "点这里</a>下载最新版本。")
@@ -726,6 +727,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.actionAbout.setEnabled(False)
         self.actionCheck_Updates.triggered.connect(lambda: self.setup_normal_thread(lambda: check_updates(True)))
         self.actionChat_with_AI.triggered.connect(self.chat_with_ai)
+        self.actionCorrect_composition.setEnabled(False)
 
     def setup_thread(self, sub, cut_, cut_sec, erase_handwriting):
         dir_path = QFileDialog.getExistingDirectory(win, "浏览", "C:/")
@@ -776,21 +778,30 @@ class Window(QMainWindow, Ui_MainWindow):
                 self.checkBox_2.setChecked(options["erase"])
                 self.lineEdit_6.setText(options["yd_id"])
                 self.lineEdit_7.setText(options["yd_key"])
+                self.checkBox_3.setChecked(options["AI"])
+                self.lineEdit_8.setText(options["QIANFAN_ACCESS_KEY"])
+                self.lineEdit_9.setText(options["QIANFAN_SECRET_KEY"])
+                self.buttonBox.accepted.connect(self.save)
+
+            def save(self):
+                global options
+                options = {
+                    "size": (int(self.lineEdit.text()), int(self.lineEdit_2.text())),
+                    "online": self.checkBox.isChecked(),
+                    "APP_ID": self.lineEdit_3.text(),
+                    "API_KEY": self.lineEdit_4.text(),
+                    "SECRET_KEY": self.lineEdit_5.text(),
+                    "erase": self.checkBox_2.isChecked(),
+                    "yd_id": self.lineEdit_6.text(),
+                    "yd_key": self.lineEdit_7.text(),
+                    "AI": self.checkBox_3.isChecked(),
+                    "QIANFAN_ACCESS_KEY": self.lineEdit_8.text(),
+                    "QIANFAN_SECRET_KEY": self.lineEdit_9.text(),
+                }
+                safe.dump(options, "./options.safe")
         settings_window = Settings()
         self.move_center(settings_window)
         settings_window.exec()
-        global options
-        options = {
-            "size": (int(settings_window.lineEdit.text()), int(settings_window.lineEdit_2.text())),
-            "online": settings_window.checkBox.isChecked(),
-            "APP_ID": settings_window.lineEdit_3.text(),
-            "API_KEY": settings_window.lineEdit_4.text(),
-            "SECRET_KEY": settings_window.lineEdit_5.text(),
-            "erase": settings_window.checkBox_2.isChecked(),
-            "yd_id": settings_window.lineEdit_6.text(),
-            "yd_key": settings_window.lineEdit_7.text(),
-        }
-        safe.dump(options, "./options.safe")
 
     def cut_starter(self, text, erase_handwriting):
         if text == "自动识别":
@@ -877,6 +888,7 @@ class Window(QMainWindow, Ui_MainWindow):
                 self.setupUi(self)
                 self.pushButton.clicked.connect(lambda: self.setup_thread(lambda: api(self.plainTextEdit.toPlainText(),
                                                                                       self.comboBox.currentText())))
+                self.pushButton_2.clicked.connect(lambda: pyperclip.copy(self.textEdit.toPlainText()))
 
             def setup_thread(self, func):
                 self.textEdit.setText("生成中...")
@@ -919,9 +931,8 @@ if __name__ == "__main__":
             "yd_id": "",
             "yd_key": "",
             "AI": False,
-            "AI_APP_ID": "",
-            "AI_API_KEY": "",
-            "AI_SECRET_KEY": "",
+            "QIANFAN_ACCESS_KEY": "",
+            "QIANFAN_SECRET_KEY": "",
         }
         safe.dump(options, "./options.safe")
     if not os.path.isdir("./math"):
@@ -970,7 +981,10 @@ if __name__ == "__main__":
     client = AipOcr(options["APP_ID"], options["API_KEY"], options["SECRET_KEY"])
     if options["erase"]:
         erase.set_key(options["yd_id"], options["yd_key"])
-    chat_comp = qianfan.ChatCompletion(ak="0RMp5YODd7qxztv41KzhgZjD", sk="V305jJQA8YE4D6GpGg5p9fc0DLbpTAfK")
+    if options["AI"]:
+        os.environ["QIANFAN_ACCESS_KEY"] = options["QIANFAN_ACCESS_KEY"]
+        os.environ["QIANFAN_SECRET_KEY"] = options["QIANFAN_SECRET_KEY"]
+        chat_comp = qianfan.ChatCompletion()
     msgs = qianfan.Messages()
     pygame.init()
     font = pygame.font.Font("./msyh.ttc", 20)
