@@ -9,4 +9,5 @@ PyMuPDF
 python-docx
 baidu-aip
 chardet
-pycryptodomex
+qianfan
+pyperclip

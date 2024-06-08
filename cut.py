@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'cut.ui'
+# Form implementation generated from reading ui file '.\cut.ui'
 #
 # Created by: PyQt6 UI code generator 6.7.0
 #
@@ -46,7 +46,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "拆分试卷"))
         self.label.setText(_translate("Dialog", "拆分部分"))
         self.comboBox.setItemText(0, _translate("Dialog", "自动识别"))
         self.comboBox.setItemText(1, _translate("Dialog", "1"))

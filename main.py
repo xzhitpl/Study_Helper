@@ -24,6 +24,7 @@ from docx.shared import Cm, Pt, RGBColor
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
+import about
 import chat
 import contact
 import cut
@@ -509,7 +510,7 @@ def practice_mistakes(sub, method, num):
     ending = document.add_paragraph("练习结束，记得将错误情况录入错题整理程序")
     ending.alignment = WD_ALIGN_PARAGRAPH.CENTER
     win.setEnabled(True)
-    document.save(QFileDialog.getSaveFileName(win, "保存", "C:/", "Word 文档 (*.docx)")[0])
+    document.save(QFileDialog.getSaveFileName(win, "保存", default_path, "Word 文档 (*.docx)")[0])
     win.record_mistakes()
     with open(f"./{sub}/index.pkl", "wb") as f_:
         pickle.dump(idx, f_)
@@ -624,7 +625,7 @@ def first_page(sub):
             new = table.cell(2, 0).merge(table.cell(2, 1))
             new.text = "笔记：\n\n\n\n\n\n\n"
     win.setEnabled(True)
-    document.save(QFileDialog.getSaveFileName(win, "保存", "C:/", "Word 文档 (*.docx)")[0])
+    document.save(QFileDialog.getSaveFileName(win, "保存", default_path, "Word 文档 (*.docx)")[0])
 
 
 class Thread(QThread):
@@ -724,13 +725,13 @@ class Window(QMainWindow, Ui_MainWindow):
         self.actionProcess_Mistakes.setEnabled(False)
         self.actionSave.setEnabled(False)
         self.actionContact_Us.triggered.connect(self.contact_us)
-        self.actionAbout.setEnabled(False)
+        self.actionAbout.triggered.connect(self.about)
         self.actionCheck_Updates.triggered.connect(lambda: self.setup_normal_thread(lambda: check_updates(True)))
         self.actionChat_with_AI.triggered.connect(self.chat_with_ai)
         self.actionCorrect_composition.setEnabled(False)
 
     def setup_thread(self, sub, cut_, cut_sec, erase_handwriting):
-        dir_path = QFileDialog.getExistingDirectory(win, "浏览", "C:/")
+        dir_path = QFileDialog.getExistingDirectory(win, "浏览", default_path)
         self.setEnabled(False)
         self.thread_ = Thread(lambda: err_handler(dir_path, sub, cut_, cut_sec, erase_handwriting))
         self.thread_.signal_tuple.connect(self.thread_finished)
@@ -749,7 +750,7 @@ class Window(QMainWindow, Ui_MainWindow):
             elif item[0][0] == 0:
                 QMessageBox.information(self, item[0][1], item[0][2])
         else:
-            item[0].save(QFileDialog.getSaveFileName(self, "保存", "C:/", "Word 文档 (*.docx)")[0])
+            item[0].save(QFileDialog.getSaveFileName(self, "保存", default_path, "Word 文档 (*.docx)")[0])
 
     def move_center(self, obj):
         obj.move(int((self.pos().x() + win.size().width() / 2 - obj.size().width() / 2)),
@@ -761,7 +762,7 @@ class Window(QMainWindow, Ui_MainWindow):
         if isinstance(item[0], str):
             QMessageBox.critical(win, "程序运行出错", f"错误信息：\n{item[0]}")
         else:
-            item[0].save(QFileDialog.getSaveFileName(win, "保存", "C:/", "Word 文档 (*.docx)")[0])
+            item[0].save(QFileDialog.getSaveFileName(win, "保存", default_path, "Word 文档 (*.docx)")[0])
 
     def settings(self):
         class Settings(QDialog, settings.Ui_Dialog):
@@ -904,6 +905,15 @@ class Window(QMainWindow, Ui_MainWindow):
         self.move_center(chat_win)
         chat_win.exec()
 
+    def about(self):
+        class About(QDialog, about.Ui_Dialog):
+            def __init__(self, parent=self):
+                QDialog.__init__(self, parent)
+                self.setupUi(self)
+        about_win = About()
+        self.move_center(about_win)
+        about_win.exec()
+
 
 def except_hook(cls, exception, _traceback):
     err = "".join(traceback.format_exception(cls, exception, _traceback))
@@ -914,6 +924,7 @@ def except_hook(cls, exception, _traceback):
 
 
 if __name__ == "__main__":
+    default_path = os.path.expanduser("~\\Documents")
     if os.path.isfile("./error.log"):
         with open("./error.log", "r", encoding="UTF-8") as f:
             feedback.send(f.read())

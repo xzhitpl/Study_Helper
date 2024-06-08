@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>错题整理</string>
+   <string>学习助手</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -146,6 +146,8 @@
      <string>工具</string>
     </property>
     <addaction name="actionCut_Paper"/>
+    <addaction name="actionChat_with_AI"/>
+    <addaction name="actionCorrect_composition"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
@@ -216,6 +218,16 @@
   <action name="actionExport_Docx">
    <property name="text">
     <string>生成打印件</string>
+   </property>
+  </action>
+  <action name="actionChat_with_AI">
+   <property name="text">
+    <string>与AI交流</string>
+   </property>
+  </action>
+  <action name="actionCorrect_composition">
+   <property name="text">
+    <string>批改英语作文</string>
    </property>
   </action>
  </widget>

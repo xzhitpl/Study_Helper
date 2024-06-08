@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'win.ui'
+# Form implementation generated from reading ui file '.\win.ui'
 #
 # Created by: PyQt6 UI code generator 6.7.0
 #
@@ -84,6 +84,10 @@ class Ui_MainWindow(object):
         self.actionContact_Us.setObjectName("actionContact_Us")
         self.actionExport_Docx = QtGui.QAction(parent=MainWindow)
         self.actionExport_Docx.setObjectName("actionExport_Docx")
+        self.actionChat_with_AI = QtGui.QAction(parent=MainWindow)
+        self.actionChat_with_AI.setObjectName("actionChat_with_AI")
+        self.actionCorrect_composition = QtGui.QAction(parent=MainWindow)
+        self.actionCorrect_composition.setObjectName("actionCorrect_composition")
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionProcess_Mistakes)
@@ -98,6 +102,8 @@ class Ui_MainWindow(object):
         self.menuHelp.addAction(self.actionCheck_Updates)
         self.menuHelp.addAction(self.actionAbout)
         self.menuTools.addAction(self.actionCut_Paper)
+        self.menuTools.addAction(self.actionChat_with_AI)
+        self.menuTools.addAction(self.actionCorrect_composition)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuTools.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
@@ -108,7 +114,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "错题整理"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "学习助手"))
         self.pushButtonMath.setText(_translate("MainWindow", "数学"))
         self.pushButtonPhysics.setText(_translate("MainWindow", "物理"))
         self.pushButtonChem.setText(_translate("MainWindow", "化学"))
@@ -130,3 +136,5 @@ class Ui_MainWindow(object):
         self.actionExport_Mistakes.setText(_translate("MainWindow", "导出错题"))
         self.actionContact_Us.setText(_translate("MainWindow", "联系我们"))
         self.actionExport_Docx.setText(_translate("MainWindow", "生成打印件"))
+        self.actionChat_with_AI.setText(_translate("MainWindow", "与AI交流"))
+        self.actionCorrect_composition.setText(_translate("MainWindow", "批改英语作文"))

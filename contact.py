@@ -37,4 +37,4 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "联系我们"))
-        self.label.setText(_translate("Dialog", "请在下方输入要发送给我们的信息，或通过<a href=\"mailto:xzhiter@outlook.com\">xzhiter@outlook.com</a>联系我们。"))
+        self.label.setText(_translate("Dialog", "<html><head/><body><p>请在下方输入要发送给我们的信息，或通过<a href=\"mailto:xzhiter@outlook.com\"><span style=\" text-decoration: underline; color:#0000ff;\">xzhitpl@outlook.com</span></a>联系我们。</p></body></html>"))

@@ -17,7 +17,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>请在下方输入要发送给我们的信息，或通过&lt;a href=&quot;mailto:xzhiter@outlook.com&quot;&gt;xzhiter@outlook.com&lt;/a&gt;联系我们。</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;请在下方输入要发送给我们的信息，或通过&lt;a href=&quot;mailto:xzhiter@outlook.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;xzhitpl@outlook.com&lt;/span&gt;&lt;/a&gt;联系我们。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>

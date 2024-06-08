@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'sub_win.ui'
+# Form implementation generated from reading ui file '.\sub_win.ui'
 #
 # Created by: PyQt6 UI code generator 6.7.0
 #
@@ -38,7 +38,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "选择学科"))
         self.label.setText(_translate("Dialog", "请选择目标学科"))
         self.comboBox.setItemText(0, _translate("Dialog", "数学"))
         self.comboBox.setItemText(1, _translate("Dialog", "物理"))

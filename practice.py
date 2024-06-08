@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'practice.ui'
+# Form implementation generated from reading ui file '.\practice.ui'
 #
 # Created by: PyQt6 UI code generator 6.7.0
 #
@@ -58,6 +58,7 @@ class Ui_Dialog(object):
         self.comboBox_4.addItem("")
         self.comboBox_4.addItem("")
         self.comboBox_4.addItem("")
+        self.comboBox_4.addItem("")
         self.horizontalLayout_6.addWidget(self.comboBox_4)
         self.verticalLayout.addLayout(self.horizontalLayout_6)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
@@ -84,8 +85,6 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout_3)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        spacerItem = QtWidgets.QSpacerItem(45, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem)
         self.buttonBox = QtWidgets.QDialogButtonBox(parent=Dialog)
         self.buttonBox.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.StandardButton.Cancel|QtWidgets.QDialogButtonBox.StandardButton.Ok)
@@ -100,7 +99,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "重练错题"))
         self.label_4.setText(_translate("Dialog", "重练学科"))
         self.comboBox_3.setItemText(0, _translate("Dialog", "数学"))
         self.comboBox_3.setItemText(1, _translate("Dialog", "物理"))
@@ -113,6 +112,7 @@ class Ui_Dialog(object):
         self.comboBox_4.setItemText(0, _translate("Dialog", "未忽略的所有错题"))
         self.comboBox_4.setItemText(1, _translate("Dialog", "未忽略的未做错题"))
         self.comboBox_4.setItemText(2, _translate("Dialog", "未忽略的再错错题"))
+        self.comboBox_4.setItemText(3, _translate("Dialog", "自选日期"))
         self.checkBox.setText(_translate("Dialog", "忽略"))
         self.comboBox_2.setItemText(0, _translate("Dialog", "一月前"))
         self.comboBox_2.setItemText(1, _translate("Dialog", "三月前"))
