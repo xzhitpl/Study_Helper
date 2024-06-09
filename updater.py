@@ -1,4 +1,3 @@
-import ctypes
 import requests
 import os
 import sys
@@ -22,8 +21,7 @@ if __name__ == "__main__":
         subprocess.Popen("delete.cmd", shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE, creationflags=0x08000000)
         sys.exit()
-    elif sys.argv[1] == "update":
-        ctypes.windll.user32.MessageBoxW(0, )
+    else:
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                                  "Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0"}
         ver = sys.argv[1]
@@ -41,3 +39,4 @@ if __name__ == "__main__":
         shutil.rmtree("./_internal")
         shutil.copyfile("./学习助手/学习助手.exe", "./学习助手.exe")
         shutil.copytree("./学习助手/_internal", "./_internal")
+        shutil.rmtree("./学习助手")
