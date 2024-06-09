@@ -16,6 +16,7 @@ import requests
 from PIL import Image
 from PyQt6.QtCore import QThread, pyqtSignal, pyqtSlot
 from PyQt6.QtWidgets import QFileDialog, QApplication, QMainWindow, QMessageBox, QDialog
+from PyQt6.QtGui import QIcon
 from aip import AipOcr
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -25,6 +26,7 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
 import about
+import agreement
 import chat
 import contact
 import cut
@@ -712,6 +714,7 @@ class Window(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent=parent)
         self.setupUi(self)
+        self.setWindowIcon(QIcon("./icon.png"))
         self.actionOpen.triggered.connect(lambda: self.choose_sub(self.normal_open))
         self.pushButtonMath.clicked.connect(lambda: self.setup_thread("math", False, -1, False))
         self.pushButtonPhysics.clicked.connect(lambda: self.setup_thread("phy", False, -1, False))
@@ -914,6 +917,21 @@ class Window(QMainWindow, Ui_MainWindow):
         self.move_center(about_win)
         about_win.exec()
 
+    def agreement(self):
+        def disagree():
+            os.system("start updater.exe delete")
+            sys.exit()
+
+        class Agreement(QDialog, agreement.Ui_Dialog):
+            def __init__(self, parent=self):
+                QDialog.__init__(self, parent)
+                self.setupUi(self)
+                self.rejected.connect(disagree)
+
+        agreement_win = Agreement()
+        self.move_center(agreement_win)
+        agreement_win.exec()
+
 
 def except_hook(cls, exception, _traceback):
     err = "".join(traceback.format_exception(cls, exception, _traceback))
@@ -924,14 +942,17 @@ def except_hook(cls, exception, _traceback):
 
 
 if __name__ == "__main__":
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
     default_path = os.path.expanduser("~\\Documents")
     if os.path.isfile("./error.log"):
         with open("./error.log", "r", encoding="UTF-8") as f:
             feedback.send(f.read())
         os.remove("./error.log")
     if os.path.isfile("./options.safe"):
+        show = False
         options = safe.load("./options.safe")
     else:
+        show = True
         options = {
             "size": (1500, 900),
             "online": True,
@@ -1009,4 +1030,6 @@ if __name__ == "__main__":
         os.remove("./practiced.pkl")
         win.record_mistakes()
     win.setup_normal_thread(lambda: check_updates(False))
+    if show:
+        win.agreement()
     app.exec()
